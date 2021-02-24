@@ -1,0 +1,35 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.page{
+    width: 100vw;
+    height: 100vh;
+}
+
+.page .world{
+    display: grid;
+    grid-template-columns: repeat(30,1fr);
+    grid-template-rows: repeat(18,1fr);
+    height: 100%;
+    width: 100%;
+}
+
+.block{
+    background: url('./Img/rock.png') no-repeat center center/cover;
+}
+
+.dirt{
+    background: url('./Img/soil.jpg') no-repeat center center/cover;
+}
+
+
+.grass{
+    background: url('./Img/grass.png') no-repeat center center/cover;
+}
+
+.block:hover{
+    border: .1px solid #fff;
+}
