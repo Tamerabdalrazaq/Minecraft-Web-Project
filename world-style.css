@@ -18,7 +18,7 @@
 }
 
 .block{
-    background: url('./Img/rock.png') no-repeat center center/cover;
+    background-color: #8DBFFF;
 }
 
 .dirt{
@@ -28,6 +28,16 @@
 
 .grass{
     background: url('./Img/grass.png') no-repeat center center/cover;
+}
+
+.rock{
+    background: url('./Img/rock.png') no-repeat center center/cover;
+}
+.wood{
+    background: url('./Img/wood.png') no-repeat center center/cover;
+}
+.leaves{
+    background: url('./Img/tree-leaves.png') no-repeat center center/cover;
 }
 
 .block:hover{
