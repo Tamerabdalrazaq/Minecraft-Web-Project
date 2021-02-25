@@ -7,6 +7,9 @@
 .page{
     width: 100vw;
     height: 100vh;
+    display: grid;
+    grid-template-columns: 6fr 1fr;
+    overflow-y: hidden;
 }
 
 .page .world{
@@ -14,11 +17,82 @@
     grid-template-columns: repeat(30,1fr);
     grid-template-rows: repeat(18,1fr);
     height: 100%;
-    width: 100%;
 }
 
+
+/* Sidebar */
+
+aside{
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #3c3c3c;
+}
+
+aside > div{
+    width: 100%;
+    padding: .5rem 1rem;
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #fff;
+}
+
+aside .tools .tool{
+    width: 4rem;
+    height: 4rem;
+    border: 2px solid #fff;
+    padding:  5px;
+}
+
+
+
+aside .inventory .element {
+    width: 4rem;
+    height: 4rem;
+    border: 2px solid #fff;
+    padding:  5px;
+    position: relative;
+}
+
+aside .inventory .element::before{
+    content: attr(data-before);
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -.7rem;
+    left: -.7rem;
+    background-color: rgba(255, 39, 39, 0.823);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+}
+
+
+aside .options button{
+    width: 100%;
+    padding: .5rem 1.5rem;
+    background-color: transparent;
+    border: 2px solid #84abdd;
+    border-radius: .4rem;
+    font-weight: 600;
+    color: #d4e8ff;
+}
+
+aside .tools .tool:hover,aside .inventory .element:hover,aside .options button:hover{
+    border-color: rgb(255, 41, 41) !important ;
+    cursor: pointer;
+}
+/*  */
 .block{
-    background-color: #8DBFFF;
+    background-color: #84abdd;
 }
 
 .dirt{
@@ -36,8 +110,18 @@
 .wood{
     background: url('./Img/wood.png') no-repeat center center/cover;
 }
-.leaves{
+.leaf{
     background: url('./Img/tree-leaves.png') no-repeat center center/cover;
+}
+
+.axe{
+    background: url('./Img/tools/axe.png') no-repeat center center/cover;
+}
+.pickaxe{
+    background: url('./Img/tools/pickaxe.png') no-repeat center center/cover;
+}
+.shovel{
+    background: url('./Img/tools/shovel.png') no-repeat center center/cover;
 }
 
 .block:hover{

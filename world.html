@@ -10,9 +10,30 @@
 <body>
     <div class="page">
         <div class="world"></div>
+
+        <aside>
+            <div class="tools">
+                <div class="tool axe" role="button" data-hand = 'axe'></div>
+                <div class="tool pickaxe" role="button" data-hand = 'pickaxe'></div>
+                <div class="tool shovel" role="button" data-hand = 'shovel'></div>
+            </div>
+            <hr>
+            <div class="inventory">
+                <div class="element dirt" role="button" data-hand = 'dirt' data-before = '0'></div>
+                <div class="element grass" role="button" data-hand = 'grass' data-before = '0'></div>
+                <div class="element leaf" role="button" data-hand = 'leaves' data-before = '0'></div>
+                <div class="element rock" role="button" data-hand = 'rock' data-before = '0'></div>
+                <div class="element wood" role="button" data-hand = 'wood' data-before = '0'></div>
+            </div>
+
+            <div class="options">
+                <button id="#btnToMainPage">Back to Main Page</button>
+                <button id="#btnNewWorld">Generate New World</button>
+                <button id="#btnSaveProgress">Save Your Progress</button>
+            </div>
+        </aside>
+    
     </div>
-
-
     <script src="./world.js"></script>
 </body>
 </html>
