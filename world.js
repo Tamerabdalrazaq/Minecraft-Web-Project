@@ -2,6 +2,8 @@
 const numOfColumns = 30;
 const numOfLayers = 18;
 const width = null;
+const tools = ['axe','pickaxe','shovel'];
+const elements = ['dirt','rock','grass','wood','leaf','tnt'];
 
 // World data from user
 let input_width = localStorage.getItem('world_width');
@@ -25,6 +27,9 @@ function Block(row,col,type,occupied){
 // Variables
 let page = document.querySelector('.page');
 let worldPage = document.querySelector('.page .world');
+worldPage.style = `
+grid-template-columns: repeat(${numOfColumns},1fr);
+grid-template-rows: repeat(${numOfLayers},1fr);`;
 let world = {
     groundLevel: Math.round(numOfLayers*input_land/100),
     hand: 'cursor',
@@ -33,7 +38,8 @@ let world = {
         rock: 0,
         grass: 0,
         wood: 0,
-        leaves: 0,
+        leaf: 0,
+        tnt:0,
     },
     inventory: {
         dirt: 0, 
@@ -41,6 +47,7 @@ let world = {
         grass: 0,
         wood: 0,
         leaf: 0,
+        tnt:0,
     },
 };
 let blocks = [];
@@ -77,9 +84,9 @@ console.log(world);
 
 //Functions
 function createBlocks(){
-    for(let row = 0; row<18; row++){
+    for(let row = 0; row< numOfLayers; row++){
         let r = [];
-        for(let column = 0; column < 30; column ++){
+        for(let column = 0; column < numOfColumns; column ++){
             let block = document.createElement('div');
             block.setAttribute('data-row', `${row}`);
             block.setAttribute('data-column', `${column}`);
@@ -155,7 +162,7 @@ function createTree(y,x,trunkHeight, leavesWidth){
                 block[0].classList.add('leaf');
                 block[1].type = 'leaf';
                 block[1].occupied = true;
-                world.elements.leaves++;
+                world.elements.leaf++;
             }
         }
     }
@@ -165,17 +172,70 @@ function createTree(y,x,trunkHeight, leavesWidth){
 function worldClick(e){
     let block = e.target;
     if(block != worldPage){
-        let blockObj = blocks[block.dataset.row][block.dataset.column][1]
-        if(blockObj.occupied){
-            let inventoryButton = document.querySelector(`.inventory .${blockObj.type}`);
-            block.classList = 'block';
-            blockObj.occupied = false;
-            world.inventory[blockObj.type]++;
-            inventoryButton.dataset.before = world.inventory[blockObj.type];
+        let blockObj = blocks[block.dataset.row][block.dataset.column][1];
+        if(tools.includes(world.hand)){
+            if(blockObj.occupied){
+                if(!checkValidRemove(block))
+                    return false;
+                deleteBlockElement(block.dataset.row,block.dataset.column);
+            }
+            else{}
         }
-
-        else{
-            
+        else if(elements.includes(world.hand)){
+            if(!blockObj.occupied){
+                if(world.inventory[world.hand] > 0 || world.hand === 'tnt'){
+                    let inventoryButton = document.querySelector(`.inventory .${world.hand}`);
+                    block.classList.add(world.hand);
+                    blockObj.occupied = true;
+                    blockObj.type = world.hand;
+                    world.inventory[world.hand]--;
+                    inventoryButton.dataset.before = world.inventory[world.hand];
+                    if(world.hand === 'tnt'){
+                        explosion(blockObj.row, blockObj.col);
+                    }
+                }
+            }
+            else{}
         }
     }
 }
+
+function generateRandom(a,b){
+    return Math.floor(a + Math.random()* (b-a+1));
+}
+
+function deleteBlockElement(r,c){
+    let block = blocks[r][c];
+    if(!isEmpty(r,c)){
+        let inventoryButton = document.querySelector(`.inventory .${block[1].type}`);
+        block[0].classList = 'block';
+        world.inventory[block[1].type]++;
+        inventoryButton.dataset.before = world.inventory[block[1].type];
+        block[1].type = null;
+        block[1].occupied = false;
+    }
+}
+
+function checkValidRemove(block){
+    let r = parseInt(block.dataset.row);
+    let c = parseInt(block.dataset.column);
+    return (isEmpty(r-1,c) || isEmpty(r+1,c) || isEmpty(r,c-1) || isEmpty(r,c+1));
+}
+
+
+function isEmpty(r,c){
+    if(r<0 || c<0 || r>=numOfLayers || c>=numOfColumns)
+        return false;
+    return !blocks[r][c][1].occupied;
+}
+
+function explosion(r,c){
+    let explisonRadius = generateRandom(2,3);
+    for(let i = -explisonRadius; i<=explisonRadius; i++){
+        for(let v = 0; v<=generateRandom(1,4); v++){
+            deleteBlockElement(r+i,c-v);
+        }
+
+    }
+}
+

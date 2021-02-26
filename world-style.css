@@ -113,6 +113,9 @@ aside .tools .tool:hover,aside .inventory .element:hover,aside .options button:h
 .leaf{
     background: url('./Img/tree-leaves.png') no-repeat center center/cover;
 }
+.tnt{
+    background: url('./Img/tnt.png') no-repeat center center/cover;
+}
 
 .axe{
     background: url('./Img/tools/axe.png') no-repeat center center/cover;
