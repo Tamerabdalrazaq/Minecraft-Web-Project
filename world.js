@@ -14,6 +14,7 @@ let input_land = localStorage.getItem('world_land');
 let toolsButtons = document.querySelectorAll('.tools > div.tool');
 let inventorysButtons = document.querySelectorAll('.inventory > div.element');
 let optionsButtons = document.querySelectorAll('.options > button');
+let explosionSound = new Audio('./sound/explode1.mp3');
 
 
 // Objects
@@ -118,11 +119,11 @@ function createGround(rows){
 }
 
 function createRocks(){
-    let numOfRocks = Math.floor(Math.random()*5 + 1);
+    let numOfRocks = generateRandom(4,10);
     let groundRow = numOfLayers - world.groundLevel -1;
     for(let i = 0; i<numOfRocks; i++){
         let randomX = Math.floor(Math.random()*numOfColumns );
-        if(blocks[groundRow][randomX][1].occupied)
+        if(blocks[groundRow][randomX][1].occupied || blocks[groundRow][randomX][1].type === 'wood')
             i--;
         else{
             blocks[groundRow][randomX][0].classList.add('rock');
@@ -137,12 +138,16 @@ function createTrees(){
     let numOfTrees = input_trees;
     let groundRow = numOfLayers - world.groundLevel -1;
     for(let i = 0; i<numOfTrees; i++){
-        let randomX = Math.floor(Math.random()*numOfColumns );
-        if(blocks[groundRow][randomX][1].occupied)
+        let randomX = generateRandom(0,numOfColumns-1);
+        let treeTrunk = generateRandom(2,Math.min(4,groundRow-1));
+        let treeLeaves = generateRandom(2,Math.min(4,groundRow-treeTrunk));
+        treeLeaves = treeLeaves%2? treeLeaves: treeLeaves+1;
+        if(!isEmpty(groundRow,randomX) 
+        || isBeyondWorld(groundRow,randomX+Math.floor(treeLeaves/2)) 
+        || isBeyondWorld(groundRow,randomX-Math.floor(treeLeaves/2))
+        )
             i--;
-        else{
-            let treeTrunk = Math.floor(Math.random()*4 + 1);
-            let treeLeaves = Math.floor(Math.random()*5 + 1); 
+        else{ 
             createTree(groundRow,randomX,treeTrunk,treeLeaves);
         }
     }
@@ -224,18 +229,25 @@ function checkValidRemove(block){
 
 
 function isEmpty(r,c){
-    if(r<0 || c<0 || r>=numOfLayers || c>=numOfColumns)
+    if(isBeyondWorld(r,c))
         return false;
     return !blocks[r][c][1].occupied;
 }
 
-function explosion(r,c){
-    let explisonRadius = generateRandom(2,3);
-    for(let i = -explisonRadius; i<=explisonRadius; i++){
-        for(let v = 0; v<=generateRandom(1,4); v++){
-            deleteBlockElement(r+i,c-v);
-        }
+function isBeyondWorld(r,c){
+    return (r>= numOfLayers || r<0 || c>=numOfColumns || c<0);
+}
 
-    }
+function explosion(r,c){
+    let explisonRadius = generateRandom(1,3);
+    setTimeout(function(){
+        explosionSound.play();
+        for(let i = -explisonRadius; i<=explisonRadius; i++){
+            for(let v = -generateRandom(1,3); v<=generateRandom(1,3); v++){
+                if(!isBeyondWorld(r+i,c-v))
+                    deleteBlockElement(r+i,c-v);
+            }
+        }
+    },1000);
 }
 
