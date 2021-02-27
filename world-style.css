@@ -84,6 +84,7 @@ aside .options button{
     border-radius: .4rem;
     font-weight: 600;
     color: #d4e8ff;
+    text-align: center;
 }
 
 aside .tools .tool:hover,aside .inventory .element:hover,aside .options button:hover{
@@ -129,4 +130,48 @@ aside .tools .tool:hover,aside .inventory .element:hover,aside .options button:h
 
 .block:hover{
     border: .1px solid #fff;
+}
+
+@media only screen and (max-width: 800px) {
+    html{
+        font-size: 2vw;
+    }
+    .page{
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .page .world{
+        height: 90%;
+    }
+
+    aside{
+        height: 10%;
+        flex-direction: row;
+    }
+    aside > div{
+        height: 100%;
+        border-bottom: none;
+        border-right: 1px solid #fff;
+    }
+    aside .inventory .element{
+        height: 40%;
+        margin-top: 2px;
+    }
+    aside .options {
+        flex-direction: column;
+    }
+    aside .options button{
+        padding: 0 ;
+        height: 30%;
+        font-size: .7rem;
+        width: 8rem;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    aside>div{
+        justify-content: center;
+        flex-direction: column;
+    }
 }

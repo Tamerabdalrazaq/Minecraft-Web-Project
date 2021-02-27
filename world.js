@@ -1,7 +1,16 @@
+// Variables
+let page = document.querySelector('.page');
+let worldPage = document.querySelector('.page .world');
+let sideBar = document.querySelector('.page aside');
+
 // World data
-const numOfColumns = 30;
-const numOfLayers = 18;
-const width = null;
+const blockDimention = 30;
+const width = worldPage.clientWidth;
+const height = worldPage.clientHeight;
+let calculatedColumns = Math.round(width/blockDimention);
+let calculatedRows = Math.round(height/blockDimention);
+const numOfColumns = calculatedColumns;
+const numOfLayers = calculatedRows;
 const tools = ['axe','pickaxe','shovel'];
 const elements = ['dirt','rock','grass','wood','leaf','tnt'];
 
@@ -26,14 +35,13 @@ function Block(row,col,type,occupied){
 }
 
 // Variables
-let page = document.querySelector('.page');
-let worldPage = document.querySelector('.page .world');
 worldPage.style = `
 grid-template-columns: repeat(${numOfColumns},1fr);
 grid-template-rows: repeat(${numOfLayers},1fr);`;
 let world = {
     groundLevel: Math.round(numOfLayers*input_land/100),
     hand: 'cursor',
+    freeLand:numOfColumns+1,
     elements: {
         dirt: 0, 
         rock: 0,
@@ -79,7 +87,6 @@ createBlocks();
 createGround(world.groundLevel);
 createRocks();
 createTrees();
-console.log(blocks);
 console.log(world);
 
 
@@ -119,7 +126,7 @@ function createGround(rows){
 }
 
 function createRocks(){
-    let numOfRocks = generateRandom(4,10);
+    let numOfRocks = generateRandom(1,Math.floor(world.freeLand/2));
     let groundRow = numOfLayers - world.groundLevel -1;
     for(let i = 0; i<numOfRocks; i++){
         let randomX = Math.floor(Math.random()*numOfColumns );
@@ -129,24 +136,25 @@ function createRocks(){
             blocks[groundRow][randomX][0].classList.add('rock');
             blocks[groundRow][randomX][1].type = 'rock';
             blocks[groundRow][randomX][1].occupied = true;
+            world.freeLand--;
             world.elements.rock++;
         }
     }
 }
 
+
+// || isBeyondWorld(groundRow,randomX+Math.floor(treeLeaves/2)) 
+// || isBeyondWorld(groundRow,randomX-Math.floor(treeLeaves/2))
 function createTrees(){
-    let numOfTrees = input_trees;
+    let numOfTrees = Math.min(input_trees, world.freeLand-1);
     let groundRow = numOfLayers - world.groundLevel -1;
     for(let i = 0; i<numOfTrees; i++){
         let randomX = generateRandom(0,numOfColumns-1);
         let treeTrunk = generateRandom(2,Math.min(4,groundRow-1));
         let treeLeaves = generateRandom(2,Math.min(4,groundRow-treeTrunk));
         treeLeaves = treeLeaves%2? treeLeaves: treeLeaves+1;
-        if(!isEmpty(groundRow,randomX) 
-        || isBeyondWorld(groundRow,randomX+Math.floor(treeLeaves/2)) 
-        || isBeyondWorld(groundRow,randomX-Math.floor(treeLeaves/2))
-        )
-            i--;
+        if(!isEmpty(groundRow-1,randomX)){
+        }
         else{ 
             createTree(groundRow,randomX,treeTrunk,treeLeaves);
         }
@@ -205,6 +213,16 @@ function worldClick(e){
     }
 }
 
+
+findSuitableTreePositions(3);
+function findSuitableTreePositions(n){
+    let freeGroundBlocks = blocks[numOfLayers - world.groundLevel -1].filter(element => {
+        return !element[1].occupied;
+    });
+    console.log(freeGroundBlocks);
+}
+
+
 function generateRandom(a,b){
     return Math.floor(a + Math.random()* (b-a+1));
 }
@@ -250,4 +268,3 @@ function explosion(r,c){
         }
     },1000);
 }
-
