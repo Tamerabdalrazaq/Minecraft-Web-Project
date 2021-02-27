@@ -9,7 +9,7 @@ let worldPage = document.querySelector('.page .world');
 let sideBar = document.querySelector('.page aside');
 
 // World data
-const blockDimention = 30;
+const blockDimention = input_width;
 const width = worldPage.clientWidth;
 const height = worldPage.clientHeight;
 let calculatedColumns = Math.round(width/blockDimention);
@@ -57,7 +57,7 @@ let world = {
         grass: 0,
         wood: 0,
         leaf: 0,
-        tnt:0,
+        tnt:5,
     },
 };
 let blocks = [];
@@ -86,8 +86,8 @@ worldPage.addEventListener('click', worldClick);
 // Create The World
 createBlocks();
 createGround(world.groundLevel);
-createRocks();
 createTrees();
+createRocks();
 console.log(world);
 
 
@@ -147,18 +147,11 @@ function createRocks(){
 // || isBeyondWorld(groundRow,randomX+Math.floor(treeLeaves/2)) 
 // || isBeyondWorld(groundRow,randomX-Math.floor(treeLeaves/2))
 function createTrees(){
-    let numOfTrees = Math.min(input_trees, world.freeLand-1);
+    let trees = findSuitableTreePositions(input_trees);
+    let numOfTrees = trees.length;
     let groundRow = numOfLayers - world.groundLevel -1;
     for(let i = 0; i<numOfTrees; i++){
-        let randomX = generateRandom(0,numOfColumns-1);
-        let treeTrunk = generateRandom(2,Math.min(4,groundRow-1));
-        let treeLeaves = generateRandom(2,Math.min(4,groundRow-treeTrunk));
-        treeLeaves = treeLeaves%2? treeLeaves: treeLeaves+1;
-        if(!isEmpty(groundRow-1,randomX)){
-        }
-        else{ 
-            createTree(groundRow,randomX,treeTrunk,treeLeaves);
-        }
+            createTree(groundRow,trees[i][0],trees[i][1],trees[i][2]);
     }
 }
 
@@ -217,10 +210,23 @@ function worldClick(e){
 
 findSuitableTreePositions(3);
 function findSuitableTreePositions(n){
-    let freeGroundBlocks = blocks[numOfLayers - world.groundLevel -1].filter(element => {
-        return !element[1].occupied;
-    });
+    let trees=[];
+    let groundRow = numOfLayers - world.groundLevel -1;
+    let freeGroundBlocks = blocks[groundRow].filter(element => 
+        !element[1].occupied);
     console.log(freeGroundBlocks);
+    for(let x = 0; x<n; x++){
+        let leaves = generateRandom(2,4);
+        let skyHeight = groundRow-1;
+        let trunk = generateRandom(2,4);
+        leaves = leaves%2? leaves:leaves+1;
+        let position = generateRandom(0+2,numOfColumns-1-2);
+        console.log(blocks[groundRow][position]);
+        if(!blocks[groundRow][position][1].occupied){
+            trees.push([position,trunk,leaves]);
+        }
+    }
+    return trees;
 }
 
 
