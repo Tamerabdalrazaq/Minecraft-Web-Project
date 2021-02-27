@@ -1,3 +1,8 @@
+// World data from user
+let input_width = localStorage.getItem('world_width');
+let input_trees = localStorage.getItem('world_trees');
+let input_land = localStorage.getItem('world_land');
+
 // Variables
 let page = document.querySelector('.page');
 let worldPage = document.querySelector('.page .world');
@@ -14,10 +19,6 @@ const numOfLayers = calculatedRows;
 const tools = ['axe','pickaxe','shovel'];
 const elements = ['dirt','rock','grass','wood','leaf','tnt'];
 
-// World data from user
-let input_width = localStorage.getItem('world_width');
-let input_trees = localStorage.getItem('world_trees');
-let input_land = localStorage.getItem('world_land');
 
 // Page Buttons
 let toolsButtons = document.querySelectorAll('.tools > div.tool');
@@ -267,4 +268,18 @@ function explosion(r,c){
             }
         }
     },1000);
+}
+
+
+
+// Buttons Listeners
+
+function toMainPage(){
+    window.location.replace("./index.html");
+}
+function saveProgress(){
+    window.location.replace("./world.html");
+}
+function newWorld(){
+    window.location.replace("./world.html");
 }
