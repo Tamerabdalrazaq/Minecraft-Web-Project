@@ -129,7 +129,7 @@ aside .tools .tool:hover,aside .inventory .element:hover,aside .options button:h
 }
 
 .block:hover{
-    border: .1px solid #fff;
+    border: .1px solid #fff; 
 }
 
 @media only screen and (max-width: 800px) {

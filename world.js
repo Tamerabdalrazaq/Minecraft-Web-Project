@@ -74,7 +74,7 @@ toolsButtons.forEach(button => {
 inventorysButtons.forEach(button => {
     button.addEventListener('click', function(){
         inventorysButtons.forEach(button => button.style.borderColor = 'white');
-        button.style.borderColor = 'rgb(255, 41, 41)';
+        button.style.borderColor = 'rgba(255, 41, 41)';
         world.hand = button.dataset.hand;
         console.log(world.hand);
     });
@@ -254,7 +254,11 @@ function deleteBlockElement(r,c){
 function checkValidRemove(block){
     let r = parseInt(block.dataset.row);
     let c = parseInt(block.dataset.column);
-    return (isEmpty(r-1,c) || isEmpty(r+1,c) || isEmpty(r,c-1) || isEmpty(r,c+1));
+    let condition = isEmpty(r-1,c) || isEmpty(r+1,c) || isEmpty(r,c-1) || isEmpty(r,c+1);
+    if(!condition){
+        // ......
+    }
+    return (condition);
 }
 
 
