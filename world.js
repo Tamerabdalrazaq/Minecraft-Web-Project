@@ -195,9 +195,11 @@ function worldClick(e){
                     block.classList.add(world.hand);
                     blockObj.occupied = true;
                     blockObj.type = world.hand;
-                    world.inventory[world.hand]--;
-                    inventoryButton.dataset.before = world.inventory[world.hand];
-                    if(world.hand === 'tnt'){
+                    if(world.hand != 'tnt'){
+                        world.inventory[world.hand]--;
+                        inventoryButton.dataset.before = world.inventory[world.hand];
+                    }
+                    else{
                         explosion(blockObj.row, blockObj.col);
                     }
                 }
@@ -239,8 +241,11 @@ function deleteBlockElement(r,c){
     if(!isEmpty(r,c)){
         let inventoryButton = document.querySelector(`.inventory .${block[1].type}`);
         block[0].classList = 'block';
-        world.inventory[block[1].type]++;
-        inventoryButton.dataset.before = world.inventory[block[1].type];
+        if(block[1].type != 'tnt'){
+            world.inventory[block[1].type]++;
+            inventoryButton.dataset.before = world.inventory[block[1].type];
+            console.log('tnt');
+        }
         block[1].type = null;
         block[1].occupied = false;
     }
